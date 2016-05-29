@@ -114,6 +114,35 @@ app.get('/sign-s3', (req, res) => {
     ACL: 'public-read'
   };
   
+  var fs = require('fs');
+ upload = function (req, res) {
+    var file = req.files.file;
+    fs.readFile(file.path, function (err, data) {
+        if (err) throw err; 
+        var s3bucket = new AWS.S3({params: {Bucket: 'dmg0'}});
+        s3bucket.createBucket(function () {
+            var params = {
+                Key: file.originalFilename, 
+                Body: data
+            };
+            s3bucket.upload(params, function (err, data) {
+                fs.unlink(file.path, function (err) {
+                    if (err) {
+                        console.error(err);
+                    }
+                });
+
+                if (err) {
+                    console.log('ERROR MSG: ', err);
+                    res.status(500).send(err);
+                } else {
+                    console.log('Successfully uploaded data');
+                    res.status(200).end();
+                }
+            });
+        });
+    });
+};
 
   s3.getSignedUrl('putObject', s3Params, (err, data) => {
     if(err){
@@ -133,5 +162,6 @@ app.get('/sign-s3', (req, res) => {
 app.post('/save-details', (req, res) => {
      console.log(req.body);
     console.log(req.files);
+    upload();
  res.send('ok');
 });
