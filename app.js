@@ -85,7 +85,7 @@ const aws = require('aws-sdk');
 
 
 const app = express();
-app.set('views', './views');
+app.set('views', __dirname + 'views');
 app.use(express.static('./public'));
 app.engine('html', require('ejs').renderFile);
 app.listen(process.env.PORT || 3000);
@@ -94,7 +94,7 @@ app.listen(process.env.PORT || 3000);
 const S3_BUCKET = "dmg0";
 
 
-app.get('/account', (req, res) => res.render('./views/account.html'));
+app.get('/account', (req, res) => res.render('/views/account.html'));
 
 app.get('/sign-s3', (req, res) => {
   const s3 = new aws.S3();
