@@ -114,7 +114,7 @@ app.get('/sign-s3', (req, res) => {
     ACL: 'public-read'
   };
   
-  var fs = require('fs');
+
 
 
   s3.getSignedUrl('putObject', s3Params, (err, data) => {
@@ -135,22 +135,27 @@ app.get('/sign-s3', (req, res) => {
 app.post('/save-details', (req, res) => {
      console.log(req.body);
     console.log(req.files);
+      var fs = require('fs');
+     var file = req.files.file;
      var file = req.files.file;
     fs.readFile(file.path, function (err, data) {
-        if (err) throw err; 
-        var s3bucket = new AWS.S3({params: {Bucket: 'dmg0'}});
+        if (err) throw err; // Something went wrong!
+        var s3bucket = new AWS.S3({params: {Bucket: 'mybucketname'}});
         s3bucket.createBucket(function () {
             var params = {
-                Key: file.originalFilename, 
+                Key: file.originalFilename, //file.name doesn't exist as a property
                 Body: data
             };
             s3bucket.upload(params, function (err, data) {
+                // Whether there is an error or not, delete the temp file
                 fs.unlink(file.path, function (err) {
                     if (err) {
                         console.error(err);
                     }
+                    console.log('Temp File Delete');
                 });
 
+                console.log("PRINT FILE:", file);
                 if (err) {
                     console.log('ERROR MSG: ', err);
                     res.status(500).send(err);
@@ -159,6 +164,9 @@ app.post('/save-details', (req, res) => {
                     res.status(200).end();
                 }
             });
+        });
+    });
+    
     
  res.send('ok');
 });
