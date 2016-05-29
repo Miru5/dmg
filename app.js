@@ -131,5 +131,7 @@ app.get('/sign-s3', (req, res) => {
 });
 
 app.post('/save-details', (req, res) => {
+     console.log(req.body);
+    console.log(req.files);
  res.send('ok');
 });
