@@ -113,6 +113,14 @@ app.get('/sign-s3', (req, res) => {
     ContentType: fileType,
     ACL: 'public-read'
   };
+  
+   s3.upload(params, function (err, data) {
+                fs.unlink(file.path, function (err) {
+                    if (err) {
+                        console.error(err);
+                    }
+                    console.log('Temp File Delete');
+                });
 
   s3.getSignedUrl('putObject', s3Params, (err, data) => {
     if(err){
@@ -121,7 +129,7 @@ app.get('/sign-s3', (req, res) => {
     }
     const returnData = {
       signedRequest: data,
-      url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
+      url: 'https://s3.amazonaws.com/${S3_BUCKET}/${fileName}'
     };
     res.write(JSON.stringify(returnData));
     res.end();
