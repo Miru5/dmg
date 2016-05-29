@@ -91,7 +91,7 @@ app.engine('html', require('ejs').renderFile);
 app.listen(process.env.PORT || 3000);
 
 
-const S3_BUCKET = "dmg0";
+const S3_BUCKET = process.env.S3_BUCKET;
 
 
 app.get('/account', (req, res) => res.render('account.html'));
