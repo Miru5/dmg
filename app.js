@@ -136,8 +136,7 @@ app.post('/save-details', (req, res) => {
      console.log(req.body);
     console.log(req.files);
       var fs = require('fs');
-     var file = req.files.file;
-     var file = req.files.file;
+     var file = req.files;
     fs.readFile(file.path, function (err, data) {
         if (err) throw err; // Something went wrong!
         var s3bucket = new AWS.S3({params: {Bucket: 'mybucketname'}});
