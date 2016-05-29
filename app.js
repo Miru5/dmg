@@ -114,13 +114,6 @@ app.get('/sign-s3', (req, res) => {
     ACL: 'public-read'
   };
   
-   s3.upload(params, function (err, data) {
-                fs.unlink(file.path, function (err) {
-                    if (err) {
-                        console.error(err);
-                    }
-                    console.log('Temp File Delete');
-                });
 
   s3.getSignedUrl('putObject', s3Params, (err, data) => {
     if(err){
