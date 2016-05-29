@@ -159,6 +159,6 @@ app.post('/save-details', (req, res) => {
                     res.status(200).end();
                 }
             });
-        });
+    
  res.send('ok');
 });
