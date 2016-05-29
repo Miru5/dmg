@@ -115,8 +115,27 @@ app.get('/sign-s3', (req, res) => {
   };
   
   var fs = require('fs');
- upload = function (req, res) {
-    var file = req.files.file;
+
+
+  s3.getSignedUrl('putObject', s3Params, (err, data) => {
+    if(err){
+      console.log(err);
+      return res.end();
+    }
+    const returnData = {
+      signedRequest: data,
+      url: `https://s3.amazonaws.com/${S3_BUCKET}/${fileName}`
+    };
+          console.log(s3Params);
+    res.write(JSON.stringify(returnData));
+    res.end();
+  });
+});
+
+app.post('/save-details', (req, res) => {
+     console.log(req.body);
+    console.log(req.files);
+     var file = req.files.file;
     fs.readFile(file.path, function (err, data) {
         if (err) throw err; 
         var s3bucket = new AWS.S3({params: {Bucket: 'dmg0'}});
@@ -141,27 +160,5 @@ app.get('/sign-s3', (req, res) => {
                 }
             });
         });
-    });
-};
-
-  s3.getSignedUrl('putObject', s3Params, (err, data) => {
-    if(err){
-      console.log(err);
-      return res.end();
-    }
-    const returnData = {
-      signedRequest: data,
-      url: `https://s3.amazonaws.com/${S3_BUCKET}/${fileName}`
-    };
-          console.log(s3Params);
-    res.write(JSON.stringify(returnData));
-    res.end();
-  });
-});
-
-app.post('/save-details', (req, res) => {
-     console.log(req.body);
-    console.log(req.files);
-    upload();
  res.send('ok');
 });
