@@ -87,6 +87,11 @@ const aws = require('aws-sdk');
 const app = express();
 app.set('views', './views');
 app.use(express.static('./public'));
+app.use(express.bodyParser( { keepExtensions: true, uploadDir: './views' } ));
+ app.use(express.methodOverride());
+    app.use(express.cookieParser());
+    app.use(express.session({ secret: 'super-duper-secret-secret' }));
+    app.use(app.router);
 app.engine('html', require('ejs').renderFile);
 app.listen(process.env.PORT || 3000);
 
@@ -99,7 +104,7 @@ app.get('/account', (req, res) => res.render('account.html'));
 app.get('/sign-s3', (req, res) => {
   const s3 = new aws.S3();
     console.log(req.body);
-    console.log(req.file);
+    console.log(req.files);
     
   s3.config.update({
     accessKeyId: "2ksime7s6d37rkpqocr9dfctki",
