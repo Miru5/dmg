@@ -87,11 +87,6 @@ const aws = require('aws-sdk');
 const app = express();
 app.set('views', './views');
 app.use(express.static('./public'));
-app.use(express.bodyParser( { keepExtensions: true, uploadDir: './views' } ));
- app.use(express.methodOverride());
-    app.use(express.cookieParser());
-    app.use(express.session({ secret: 'super-duper-secret-secret' }));
-    app.use(app.router);
 app.engine('html', require('ejs').renderFile);
 app.listen(process.env.PORT || 3000);
 
@@ -112,6 +107,7 @@ app.get('/sign-s3', (req, res) => {
     "region": "us-east-1"  
 });
 
+
   const fileName = req.query['file-name'];
   const fileType = req.query['file-type'];
   const s3Params = {
@@ -121,6 +117,14 @@ app.get('/sign-s3', (req, res) => {
     ContentType: fileType,
     ACL: 'public-read'
   };
+  
+   s3.upload(s3Params, function(err, data) {
+    if (err) {
+      console.log("Error uploading data: ", err);
+    } else {
+      console.log("Successfully uploaded data to myBucket/myKey");
+    }
+  });
   
 
 
