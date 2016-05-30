@@ -98,12 +98,15 @@ app.get('/account', (req, res) => res.render('account.html'));
 
 app.get('/sign-s3', (req, res) => {
   const s3 = new aws.S3();
-  
+    console.log(req.body);
+    console.log(req.file);
+    
   s3.config.update({
     accessKeyId: "2ksime7s6d37rkpqocr9dfctki",
     secretAccessKey: "1k5fh5ik9i2qgomhfiuef6ddog5mcfgs1e54d5ogsi2jamjgbt4h",
     "region": "us-east-1"  
 });
+
   const fileName = req.query['file-name'];
   const fileType = req.query['file-type'];
   const s3Params = {
@@ -133,8 +136,7 @@ app.get('/sign-s3', (req, res) => {
 });
 
 app.post('/save-details', (req, res) => {
-     console.log(req.body);
-    console.log(req.file);
+   
     
  res.send('ok');
 });
