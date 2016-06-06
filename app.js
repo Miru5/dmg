@@ -111,7 +111,7 @@ app.get('/sign-s3', (req, res) => {
   const fileName = req.query['file-name'];
   const fileType = req.query['file-type'];
   const s3Params = {
-    'Bucket': S3_BUCKET,
+    'Bucket': 'dmg0',
     'Key': 'a',
     Expires: 60,
     ContentType: fileType,
@@ -136,7 +136,7 @@ app.get('/sign-s3', (req, res) => {
     }
     const returnData = {
       signedRequest: data,
-       url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
+       url: `https://dmg0.s3.amazonaws.com/${fileName}`
     };
           console.log(s3Params);
     res.write(JSON.stringify(returnData));
