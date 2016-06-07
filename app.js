@@ -1,97 +1,15 @@
-/*var express = require("express");
+var express = require('express');
+var aws = require('aws-sdk');
+
+
 var app = express();
-var bodyParser = require("body-parser");
-var router = express.Router();
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({"extended" : false}));
-var port = process.env.PORT || 8080;
-var bcrypt = require('bcrypt');
-var SALT_WORK_FACTOR = 10;
-mongo = require('mongodb');
-var mongoose = require('mongoose');
-var ObjectId = require('mongodb').ObjectID;
-var request = require('request');
-
-var MongoClient = require("mongodb").MongoClient
-var db;
-var users;
-var categories;
-
-MongoClient.connect("mongodb://miru:toor@ds015713.mlab.com:15713/heroku_g52f05j9", function(err, database) {
-  if(err) throw err;
-  db = database;
-  users = db.collection("Users");
-  categories = db.collection("Categories");
-});
-
-app.get("/main",function(req,res){
-    res.json({"message" : "Hello World!"});
-});
-
-app.engine('html', require('ejs').renderFile);
-app.set('view engine', 'html');
-
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Request-Headers", "*");
-  res.header('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  res.header("Access-Control-Allow-Credentials", "true");
-  next();
-});
-
-var staticPath = 'public';
-
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-
-app.use('/api/', posts);
-app.use('/api/', users);
-app.use('/categories/', categories);
-app.use(express.static(staticPath));
-app.use('/', express.static(staticPath));
-app.use('/posts/*', express.static(staticPath));
-app.use('/categories/*', express.static(staticPath));
-app.use('/new/*', express.static(staticPath));
-app.use('/validateEmail/*', express.static(staticPath));
-
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
-
-app.use(function(err, req, res, next) {
-  console.dir(err);
-  res.status(err.status || 500);
-  if(err.status === 500) {
-    console.error(err.stack);
-    res.json({error: 'Internal Server Error'});
-  }
-  else if(err.status === 404) {
-    res.render('error');
-  } else {
-    res.json({error: err.message})
-  }
-});
-
-app.listen(port);
-*/
-
-const express = require('express');
-const aws = require('aws-sdk');
-
-
-const app = express();
 app.set('views', './views');
 app.use(express.static('./public'));
 app.engine('html', require('ejs').renderFile);
 app.listen(process.env.PORT || 3000);
 
 
-const S3_BUCKET = process.env.S3_BUCKET;
+var S3_BUCKET = "dmg0";
 
 
 app.get('/account', (req, res) => res.render('account.html'));
@@ -112,7 +30,7 @@ app.get('/sign-s3', (req, res) => {
   const fileType = req.query['file-type'];
   const s3Params = {
     'Bucket': 'dmg0',
-    'Key': 'a',
+    'Key': 'a.jpg',
     Expires: 60,
     ContentType: fileType,
     ACL: 'public-read'
